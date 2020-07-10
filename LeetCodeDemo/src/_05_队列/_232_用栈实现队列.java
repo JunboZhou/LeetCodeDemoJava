@@ -12,6 +12,7 @@ public class _232_用栈实现队列 {
 
     public Stack<Integer> inStack = new Stack<>();
     public Stack<Integer> outStack = new Stack<>();
+
 //    public MyQueue() {
 //
 //    }
