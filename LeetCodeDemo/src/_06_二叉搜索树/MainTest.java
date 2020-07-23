@@ -19,8 +19,15 @@ public class MainTest {
             bst.add(data[i]);
         }
 
-        BinaryTrees.println(bst);;
-        bst.preorderTraversal();
+        BinaryTrees.println(bst);
+        System.out.println(bst.height());
+//        bst.levelOrder(new BinarySearchTree.Visitor<Integer>() {
+//            @Override
+//            public boolean visit(Integer element) {
+//                System.out.println(element + " ");
+//                return element == 4 ? true : false;
+//            }
+//        });
     }
 
     static void test2() {

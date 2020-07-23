@@ -2,6 +2,7 @@ package _06_二叉搜索树;
 
 import _06_二叉搜索树.printer.BinaryTreeInfo;
 import com.sun.xml.internal.bind.v2.model.core.ID;
+import sun.rmi.server.InactiveGroupException;
 
 import javax.sound.midi.Soundbank;
 import java.util.Comparator;
@@ -34,6 +35,7 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
         size = 0;
     }
 
+    // 添加节点
     public void add(E element) {
         // 添加的是第一个节点
         if (root == null) {
@@ -84,7 +86,140 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 //
 //    }
 
+    /**
+     * 几种遍历方法 可以根据条件停止
+     */
+    /**
+     * 前序遍历: 根节点 左子树 右子树
+     */
+    public void preorder(Visitor<E> visitor) {
+        if (visitor == null) return;
+        preorder(root, visitor);
+    }
 
+    private void preorder(Node<E> node, Visitor<E> visitor) {
+        if (node == null || visitor.stop) return;
+
+        visitor.stop = visitor.visit(node.element);
+        preorder(node.left, visitor);
+        preorder(node.right, visitor);
+    }
+    /**
+     * 中序遍历: 左子树 根节点 右子树
+     */
+    public void inorder(Visitor<E> visitor) {
+        if (visitor == null) return;
+        inorder(root, visitor);
+    }
+    private void inorder(Node<E> node, Visitor<E> visitor) {
+        if (node == null || visitor.stop) return;
+
+        inorder(node.left, visitor);
+        if (visitor.stop) return;
+        visitor.stop = visitor.visit(node.element);
+        inorder(node.right, visitor);
+    }
+    /**
+     * 后续遍历: 左子树 右子树 根节点
+     */
+    public void postorder(Visitor<E> visitor) {
+        if (visitor == null) return;
+        postorder(root, visitor);
+    }
+
+    private void postorder(Node<E> node, Visitor<E> visitor) {
+        if (node == null || visitor.stop) return;
+        postorder(node.left, visitor);
+        postorder(node.right, visitor);
+        if (visitor.stop) return;
+        visitor.stop = visitor.visit(node.element);
+    }
+    /**
+     * 层续遍历: 从上往下 从左往右 一次访问每一个节点
+     */
+    public void levelOrder(Visitor<E> visitor) {
+        if (root == null || visitor.stop) return;
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll();
+            if (visitor.visit(node.element)) return;
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+        }
+    }
+
+    /**
+     * 判断一棵树是否为完全二叉树
+     */
+    public boolean isComplete() {
+        if (root == null) return false;
+
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root);
+
+        boolean isLeaf = false;
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll();
+            if (isLeaf && !node.isLeaf()) return false;
+            if (node.left != null) {
+                queue.offer(node.left);
+            } else if (node.right != null) {
+                return false;
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            } else {  // 后面遍历的节点必须是叶子节点
+                isLeaf = true;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 计算二叉树的高度 (队列方法)
+     */
+    public int height() {
+        if (root == null) return 0;
+        int height = 0;
+        // 每个层级中的元素个数
+        int levelSize = 1;
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll();
+            levelSize-- ;
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+
+            // 每个层级遍历完
+            if (levelSize == 0) {
+                levelSize = queue.size();
+                height++ ;
+            }
+        }
+        return height;
+    }
+
+    /**
+     * 计算二叉树的高度 (递归方法)
+     */
+    public int height1() {
+        return height(root);
+    }
+    private int height(Node<E> node) {
+        if (node == null) return 0;
+        return 1 + Math.max(height(node.left), height(node.right));
+    }
     /*
     // 前序遍历
     public void preorderTraversal() {
@@ -147,6 +282,17 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
             return comparator.compare(e1, e2);
         }
         return ((Comparable<E>) e1).compareTo(e2);
+    }
+
+    /**
+     * 遍历停止条件
+     * @return
+     */
+    public static abstract class Visitor<E> {
+        // 是否需要停止属性
+        boolean stop;
+
+       public abstract boolean visit(E element);
     }
 
     @Override
