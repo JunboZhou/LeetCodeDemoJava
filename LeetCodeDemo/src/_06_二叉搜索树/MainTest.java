@@ -20,7 +20,8 @@ public class MainTest {
         }
 
         BinaryTrees.println(bst);
-        System.out.println(bst.height());
+        bst.remove(7);
+        BinaryTrees.println(bst);
 //        bst.levelOrder(new BinarySearchTree.Visitor<Integer>() {
 //            @Override
 //            public boolean visit(Integer element) {
