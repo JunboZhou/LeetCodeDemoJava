@@ -22,13 +22,13 @@ public class MainTest {
         BinaryTrees.println(bst);
         bst.remove(7);
         BinaryTrees.println(bst);
-//        bst.levelOrder(new BinarySearchTree.Visitor<Integer>() {
-//            @Override
-//            public boolean visit(Integer element) {
-//                System.out.println(element + " ");
-//                return element == 4 ? true : false;
-//            }
-//        });
+        bst.inorder(new BinarySearchTree.Visitor<Integer>() {
+            @Override
+            public boolean visit(Integer element) {
+                System.out.println(element + " ");
+                return false;
+            }
+        });
     }
 
     static void test2() {

@@ -1,11 +1,5 @@
 package _06_二叉搜索树.leetcode;
 
-import _06_二叉搜索树.BinarySearchTree;
-import sun.awt.geom.AreaOp;
-
-import javax.swing.*;
-import javax.swing.event.TreeExpansionEvent;
-
 /**
  * 删除二叉搜索树中的节点
  * https://leetcode-cn.com/problems/delete-node-in-a-bst/
